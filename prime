@@ -1,0 +1,40 @@
+using System;
+using System.Collections.Generic;
+
+public class HillClimbingAckley
+{
+    private static double Ackley(double x, double y)
+    {
+        return -20 * Math.Exp(-0.2 * Math.Sqrt(0.5 * (x * x + y * y))) - Math.Exp(0.5 * (Math.Cos(2 * Math.PI * x) + Math.Cos(2 * Math.PI * y))) + 20 + Math.E;
+    }
+
+    private static (double x, double y) HillClimbingAckley(int iterations)
+    {
+        Random random = new Random();
+        double currentX = random.NextDouble() * 10 - 5;  // Initial x value between -5 and 5
+        double currentY = random.NextDouble() * 10 - 5;  // Initial y value between -5 and 5
+
+        for (int i = 0; i < iterations; i++)
+        {
+            double newX = currentX + (random.NextDouble() - 0.5) * 0.1;  // Generate a random move in x direction
+            double newY = currentY + (random.NextDouble() - 0.5) * 0.1;  // Generate a random move in y direction
+
+            if (Ackley(newX, newY) < Ackley(currentX, currentY))
+            {
+                currentX = newX;
+                currentY = newY;
+            }
+        }
+
+        return (currentX, currentY);
+    }
+
+    public static void Main()
+    {
+        (double optimumX, double optimumY) = HillClimbingAckley(1000);
+        double optimumValue = Ackley(optimumX, optimumY);
+
+        Console.WriteLine("Optimum point (x, y): ({0}, {1})", optimumX, optimumY);
+        Console.WriteLine("Optimum value: " + optimumValue);
+    }
+}
